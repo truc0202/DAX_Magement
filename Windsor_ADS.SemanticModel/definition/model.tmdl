@@ -10,7 +10,7 @@ annotation PBI_QueryOrder = ["fb_ads","gg_ads","gg_map","DimStore","FactCustomer
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_ProTooling = ["WebModelingEdit"]
+annotation PBI_ProTooling = ["WebModelingEdit","TMDL-Extension"]
 
 ref table DateTableTemplate_45066dd9-7412-4fc0-8b51-79fda353f624
 ref table fb_ads
