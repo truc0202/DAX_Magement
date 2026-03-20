@@ -1,0 +1,33 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["fb_ads","gg_ads","gg_map","DimStore","FactCustomer_Bill"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["WebModelingEdit"]
+
+ref table DateTableTemplate_45066dd9-7412-4fc0-8b51-79fda353f624
+ref table fb_ads
+ref table LocalDateTable_e386ea24-218d-429f-aaf3-02dd42205301
+ref table LocalDateTable_958ccaca-ee5a-4115-9984-875e4a1e2002
+ref table LocalDateTable_b57f865f-7181-42d1-93a7-a444bd27badc
+ref table gg_ads
+ref table LocalDateTable_4dedb976-85c9-4885-9b15-8ba859517a33
+ref table gg_map
+ref table Prm_date
+ref table Prm_KPI
+ref table DimDate
+ref table DimStore
+ref table LocalDateTable_c317bfe0-7f5c-4315-91c0-ffa0e836b78d
+ref table LocalDateTable_337bb889-cf39-430f-9003-04aa254a3a31
+ref table LocalDateTable_0a201063-01e7-4dcb-80f2-0cc8de757e52
+ref table LocalDateTable_32046680-29a9-469a-a1ca-6e4b5ef1603e
+ref table FactCustomer_Bill
+ref table LocalDateTable_3f15f637-b00f-499b-8bb6-bf7a879f7da9
+

@@ -1,0 +1,61 @@
+relationship 955f1893-0bc3-412a-b0d3-c13df0e3f306
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fb_ads.'data.campaign_start_time'
+	toColumn: LocalDateTable_e386ea24-218d-429f-aaf3-02dd42205301.Date
+
+relationship 45c00d56-d465-4ebd-b90a-1bb68bb791ac
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fb_ads.'data.campaign_stop_time'
+	toColumn: LocalDateTable_958ccaca-ee5a-4115-9984-875e4a1e2002.Date
+
+relationship bd619a85-306e-4642-9156-6653c9e18f04
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fb_ads.'data.date'
+	toColumn: LocalDateTable_b57f865f-7181-42d1-93a7-a444bd27badc.Date
+
+relationship 0a3ba8c7-62bb-47f2-8f7b-051d054d6f08
+	joinOnDateBehavior: datePartOnly
+	fromColumn: gg_ads.'data.date'
+	toColumn: LocalDateTable_4dedb976-85c9-4885-9b15-8ba859517a33.Date
+
+relationship 76df68be-ffd0-4634-8c21-8370994d1fb9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimStore.createdAt
+	toColumn: LocalDateTable_c317bfe0-7f5c-4315-91c0-ffa0e836b78d.Date
+
+relationship db6fed78-eef4-42cd-b6ac-2538d90ff6c5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimStore.updatedAt
+	toColumn: LocalDateTable_337bb889-cf39-430f-9003-04aa254a3a31.Date
+
+relationship 1add6bce-1ed0-4766-94c2-abfe2f7e64f8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimStore.CreatedTimeDW
+	toColumn: LocalDateTable_0a201063-01e7-4dcb-80f2-0cc8de757e52.Date
+
+relationship 4f214fab-ba97-4f0d-8f0d-6f8eec5f5f85
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimStore.UpdatedTimeDW
+	toColumn: LocalDateTable_32046680-29a9-469a-a1ca-6e4b5ef1603e.Date
+
+relationship 5ed9b913-0c3d-c901-76f3-45327854f2d5
+	fromColumn: gg_map.'Cửa hàng'
+	toColumn: DimStore.address
+
+relationship 03720fc2-536b-7510-583a-430a3db315e2
+	fromColumn: FactCustomer_Bill.storeId
+	toColumn: DimStore.id
+
+relationship d4426d4c-5d56-4927-bfff-19b662c31697
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimDate.Date
+	toColumn: LocalDateTable_3f15f637-b00f-499b-8bb6-bf7a879f7da9.Date
+
+relationship 644caf18-d176-3fb0-d7ab-137c3f555ed1
+	fromColumn: gg_map.'Ngày đánh giá'
+	toColumn: DimDate.Date
+
+relationship 40a8829c-8b99-86ba-6c5e-78d6c5946173
+	fromColumn: FactCustomer_Bill.DateKey
+	toColumn: DimDate.DateKey
+

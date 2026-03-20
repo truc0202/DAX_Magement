@@ -1,0 +1,48 @@
+table Prm_KPI
+	lineageTag: 8802bfd7-0624-4e07-a7d9-73667805e5c7
+
+	column Prm_KPI
+		lineageTag: 0f58fa93-47df-4b87-b3c8-5355dee057b9
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Prm_KPI Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Prm_KPI Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prm_KPI Fields'
+		isHidden
+		lineageTag: 7b9c48c2-6deb-4e19-8df6-d7ee9c6cbc24
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Prm_KPI Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prm_KPI Order'
+		isHidden
+		formatString: 0
+		lineageTag: 9fcbf652-a6f5-4962-9605-5d6c88f62566
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Prm_KPI = calculated
+		mode: import
+		source =
+				{
+				    ("SL review", NAMEOF('gg_map'[SL review]), 0),
+				    ("Rating TB", NAMEOF('gg_map'[Rating Score]), 1)
+				}
+
+	annotation PBI_Id = 8a37cb772f2e4bbc89c30bdb1cfc92da
+

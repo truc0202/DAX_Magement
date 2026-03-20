@@ -1,0 +1,294 @@
+table DimStore
+	lineageTag: fcaa43f1-7a48-4ce9-a3db-76dd3b5f9fc2
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: b6108e4c-f7dd-4899-a57c-5e93e8238d9f
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 3b5822ed-e9bb-43a1-a6f5-d99ce326253a
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column idNhanh
+		dataType: string
+		lineageTag: e09326af-a167-4f10-bccc-40170cc256c8
+		summarizeBy: none
+		sourceColumn: idNhanh
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		lineageTag: d2891e28-1e13-4e7b-99b1-b3bcbc70289d
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column district
+		dataType: int64
+		formatString: 0
+		lineageTag: 97cc07d2-44ff-4656-803c-2fb531f2bdd8
+		summarizeBy: sum
+		sourceColumn: district
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: int64
+		formatString: 0
+		lineageTag: f0af4ed3-0672-4e0b-bd9a-f48a8cfd2aeb
+		summarizeBy: sum
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column isActive
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a5741cb4-fc49-40f2-b321-24f015227bb3
+		summarizeBy: none
+		sourceColumn: isActive
+
+		annotation SummarizationSetBy = Automatic
+
+	column deleted
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 05e1f6fe-8043-4a3f-87e9-b5355053174b
+		summarizeBy: none
+		sourceColumn: deleted
+
+		annotation SummarizationSetBy = Automatic
+
+	column createdAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: aa706adb-8bcf-4891-b824-70b5e6a35bf1
+		summarizeBy: none
+		sourceColumn: createdAt
+
+		variation Variation
+			isDefault
+			relationship: 76df68be-ffd0-4634-8c21-8370994d1fb9
+			defaultHierarchy: LocalDateTable_c317bfe0-7f5c-4315-91c0-ffa0e836b78d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updatedAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: aa3e1e27-1528-418d-bede-377aa8e4dec3
+		summarizeBy: none
+		sourceColumn: updatedAt
+
+		variation Variation
+			isDefault
+			relationship: db6fed78-eef4-42cd-b6ac-2538d90ff6c5
+			defaultHierarchy: LocalDateTable_337bb889-cf39-430f-9003-04aa254a3a31.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column shortName
+		dataType: string
+		lineageTag: cdd9cb50-c885-4210-ad0b-1481a9d52910
+		summarizeBy: none
+		sourceColumn: shortName
+
+		annotation SummarizationSetBy = Automatic
+
+	column companyId
+		dataType: int64
+		formatString: 0
+		lineageTag: a5026198-3e7a-4c82-b7e4-fa224a0d714f
+		summarizeBy: count
+		sourceColumn: companyId
+
+		annotation SummarizationSetBy = Automatic
+
+	column areaId
+		dataType: int64
+		formatString: 0
+		lineageTag: 340ad8cb-82a1-4f2c-8d45-198ce82dbece
+		summarizeBy: count
+		sourceColumn: areaId
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: double
+		lineageTag: a66c417b-97db-4b81-9668-cfa87e3a93c1
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column latitude
+		dataType: double
+		lineageTag: a426b7d7-d0d2-4012-84d0-fa6dfe2110af
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CreatedTimeDW
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b4d7a2e4-984d-4531-bc04-25cf4543f0dd
+		summarizeBy: none
+		sourceColumn: CreatedTimeDW
+
+		variation Variation
+			isDefault
+			relationship: 1add6bce-1ed0-4766-94c2-abfe2f7e64f8
+			defaultHierarchy: LocalDateTable_0a201063-01e7-4dcb-80f2-0cc8de757e52.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdatedTimeDW
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ede6dae9-d9da-4490-888e-06d5cbe6a3ac
+		summarizeBy: none
+		sourceColumn: UpdatedTimeDW
+
+		variation Variation
+			isDefault
+			relationship: 4f214fab-ba97-4f0d-8f0d-6f8eec5f5f85
+			defaultHierarchy: LocalDateTable_32046680-29a9-469a-a1ca-6e4b5ef1603e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column companyCode
+		dataType: string
+		lineageTag: df70525f-f233-4296-8b60-3d7c1bf02c89
+		summarizeBy: none
+		sourceColumn: companyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column DistrictName
+		dataType: string
+		lineageTag: f09868fe-3784-4e1c-b404-88ed09065d2c
+		summarizeBy: none
+		sourceColumn: DistrictName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ASM
+		dataType: string
+		lineageTag: a3e85112-d9d5-434a-8747-eecb2ea2266e
+		summarizeBy: none
+		sourceColumn: ASM
+
+		annotation SummarizationSetBy = Automatic
+
+	column RSM
+		dataType: string
+		lineageTag: 3db2c993-1d11-496f-a331-39a971321250
+		summarizeBy: none
+		sourceColumn: RSM
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 5c5eccc7-681d-4dac-b2db-90580862ba72
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column GroupPnL
+		dataType: string
+		lineageTag: 31b2b9bb-73f2-40ce-bb35-49d97d125b9b
+		summarizeBy: none
+		sourceColumn: GroupPnL
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProvinceCode
+		dataType: string
+		lineageTag: 533dcb2b-ee11-45c3-bce1-cc5c9d0201d0
+		summarizeBy: none
+		sourceColumn: ProvinceCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProvinceName
+		dataType: string
+		lineageTag: e53ed385-0fc9-4dc6-841d-27980e3ac1bf
+		summarizeBy: none
+		sourceColumn: ProvinceName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 02953652-5dd3-41d0-ad59-6c0183c49fa6
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProvinceName2
+		dataType: string
+		lineageTag: 7bdd08df-2e01-417a-a9b6-17bbb5542334
+		summarizeBy: none
+		sourceColumn: ProvinceName2
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: efa56d6f-b22f-42d3-a2c2-36d2ca1a396c
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreNamePnL
+		dataType: string
+		lineageTag: 25c9aefe-4266-4b32-bf12-bad1c8d4ab1b
+		summarizeBy: none
+		sourceColumn: StoreNamePnL
+
+		annotation SummarizationSetBy = Automatic
+
+	column POSIDApple
+		dataType: double
+		lineageTag: 995991fc-6d33-4744-abd7-13d18abc6bd6
+		summarizeBy: sum
+		sourceColumn: POSIDApple
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DimStore = m
+		mode: import
+		source =
+				let
+				  Source = PowerBI.Dataflows([]),
+				  #"Navigation 1" = Source{[workspaceId = "d2508309-c02d-4ee4-9cef-55b2747294c8"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[dataflowId = "1dcd4cc7-ca8a-4831-9939-299bc7333eab"]}[Data],
+				  #"Navigation 3" = #"Navigation 2"{[entity = "DimStore"]}[Data],
+				  #"Removed duplicates" = Table.Distinct(#"Navigation 3", {"address"})
+				in
+				  #"Removed duplicates"
+
+	annotation PBI_ResultType = Table
+

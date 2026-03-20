@@ -1,0 +1,49 @@
+table Prm_date
+	lineageTag: f957cac8-6787-47c6-bed2-e48cf946a119
+
+	column Parameter
+		lineageTag: 9d71c8cb-3554-4a38-84ac-7fdc4e2f0b5d
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Fields'
+		isHidden
+		lineageTag: b3a0a5f9-824a-4fd1-af5b-b789660b77dc
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 38c1f02e-3e4e-4711-8105-6ab6ac117872
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Prm_date = calculated
+		mode: import
+		source =
+				{
+				    ("Month", NAMEOF ( 'DimDate'[Month label] ), 2),
+				    ("Week",  NAMEOF ( 'DimDate'[Week label] ), 1),
+				    ("Day",   NAMEOF ( 'DimDate'[Date] ), 0)
+				}
+
+	annotation PBI_Id = e65066821cc0464ba3da0d9879c36d82
+

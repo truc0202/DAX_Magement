@@ -1,0 +1,145 @@
+table gg_ads
+	lineageTag: 57611d63-2b6b-4d80-b154-43b5bfd883dc
+
+	measure cost_per_conversion = DIVIDE(sum(gg_ads[data.spend]), SUM(gg_ads[data.conversions]),0)
+		lineageTag: 0e74ebb1-e0ff-49aa-a6aa-a23f59a2d3a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CPM_gg (Cost per 1000 impressions)' = DIVIDE(sum(gg_ads[data.spend]), sum(gg_ads[data.impressions]),0)*1000
+		lineageTag: 59a39861-c4c1-4d67-9e77-a9da52825f4e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure cost_per_clicks_gg = DIVIDE(sum(gg_ads[data.spend]), SUM(gg_ads[data.clicks]),0)
+		lineageTag: fcb0e967-1a3c-4793-bec1-0266587181d5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.account_name'
+		dataType: string
+		lineageTag: 29d3bdb2-aa7b-4892-87de-48574f6df25b
+		summarizeBy: none
+		sourceColumn: data.account_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign'
+		dataType: string
+		lineageTag: 81ed57b7-7bc7-42ab-81a8-3b851e0a30dd
+		summarizeBy: none
+		sourceColumn: data.campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_status'
+		dataType: string
+		lineageTag: e68de205-7ea1-4e17-a075-8b2156da743d
+		summarizeBy: none
+		sourceColumn: data.campaign_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.city'
+		dataType: string
+		lineageTag: 71921f25-bb60-4389-88d3-d713f6edfaac
+		summarizeBy: none
+		sourceColumn: data.city
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.clicks'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8dd9467b-06b3-4501-ad5b-f281c32b0f6c
+		summarizeBy: sum
+		sourceColumn: data.clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.conversions'
+		dataType: double
+		lineageTag: c29d3c80-3d5f-4d99-aeaa-35233aca881c
+		summarizeBy: sum
+		sourceColumn: data.conversions
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 84642a99-854a-433c-95d9-acd13edf9778
+		summarizeBy: none
+		sourceColumn: data.date
+
+		variation Variation
+			isDefault
+			relationship: 0a3ba8c7-62bb-47f2-8f7b-051d054d6f08
+			defaultHierarchy: LocalDateTable_4dedb976-85c9-4885-9b15-8ba859517a33.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'data.impressions'
+		dataType: int64
+		formatString: 0
+		lineageTag: 522781a9-b9e1-4038-8adb-1da45a3ceb5d
+		summarizeBy: sum
+		sourceColumn: data.impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.interaction_rate'
+		dataType: double
+		lineageTag: 3c6ac2a3-bd5c-4a60-89a8-5389e2f71d95
+		summarizeBy: sum
+		sourceColumn: data.interaction_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.interactions'
+		dataType: int64
+		formatString: 0
+		lineageTag: 40f58688-410e-4928-850f-ddf7dcf7efc7
+		summarizeBy: sum
+		sourceColumn: data.interactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.spend'
+		dataType: double
+		lineageTag: 3db36ba4-e9f6-4875-9573-50b17fe7d38d
+		summarizeBy: sum
+		sourceColumn: data.spend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.video_views'
+		dataType: int64
+		formatString: 0
+		lineageTag: 462df63c-a617-4500-a8da-53442216a9f9
+		summarizeBy: sum
+		sourceColumn: data.video_views
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gg_ads = m
+		mode: import
+		source =
+				let
+				  Source = PowerBI.Dataflows([]),
+				  #"Navigation 1" = Source{[workspaceId = "d2508309-c02d-4ee4-9cef-55b2747294c8"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[dataflowId = "57b9bd09-dcc2-4501-abaf-4fcd19f7ce61"]}[Data],
+				  #"Navigation 3" = #"Navigation 2"{[entity = "gg_ads"]}[Data]
+				in
+				  #"Navigation 3"
+
+	annotation PBI_ResultType = Table
+

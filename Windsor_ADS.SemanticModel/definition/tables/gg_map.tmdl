@@ -1,0 +1,477 @@
+table gg_map
+	lineageTag: 1a080eb4-b0ff-43b1-a059-ebf5e83e4461
+
+	measure 'SL review' = COUNT(gg_map[id])
+		formatString: 0
+		lineageTag: 6a9ddd98-aa1c-4590-87fe-6964b2d01e82
+
+	measure 'Rating Web' =
+			
+			VAR _LatestDate =
+			    MAX (gg_map[Ngày đánh giá] )
+			RETURN
+			CALCULATE (
+			    SELECTEDVALUE( gg_map[AVG Rating Total] ),
+			    gg_map[Ngày đánh giá] = _LatestDate
+			)
+		lineageTag: 26102c07-83f9-4b14-8683-10c93a9152ba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SL đánh giá Web' =
+			
+			VAR _LatestDate =
+			    MAX ( gg_map[Ngày đánh giá] )
+			RETURN
+			CALCULATE (
+			    SELECTEDVALUE ( gg_map[Review Total] ),
+			    gg_map[Ngày đánh giá] = _LatestDate
+			)
+		lineageTag: 84124aa4-9298-4052-a184-d2dbcc7c8add
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rating TB' = AVERAGE(gg_map[Sao đánh giá])
+		lineageTag: ef90d21f-e414-407e-a15a-a1ebab07a958
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% CHANGE SL' =
+			
+			VAR SelectedDate = MAX('DimDate'[Date])
+			VAR CurrentWeek = WEEKNUM(SelectedDate, 2)
+			VAR CurrentYear = YEAR(SelectedDate)
+			
+			VAR SL_previous =
+			SWITCH(
+			    SELECTEDVALUE(Prm_date[Parameter Order]),
+			    0, CALCULATE([SL review], DATEADD(DimDate[Date],-1, DAY), REMOVEFILTERS(DimDate)),
+			    1, CALCULATE([SL review],
+			        REMOVEFILTERS('DimDate'),
+			            FILTER(
+			                ALL('DimDate'),
+			                VAR LastWeekDate = SelectedDate - 7
+			                VAR TargetYear = YEAR(LastWeekDate)
+			                VAR TargetWeek = WEEKNUM(LastWeekDate, 2)
+			                RETURN 'DimDate'[Year] = TargetYear && 'DimDate'[WeekNum] = TargetWeek
+			            )
+			    ),
+			    2, CALCULATE([SL review], DATEADD(DimDate[Date],-1, MONTH), REMOVEFILTERS(DimDate))
+			)
+			VAR SL_current = [SL review]
+			VAR change_mom = IF(ISBLANK(SL_previous), 0, (SL_current - SL_previous) / SL_previous)
+			
+			RETURN
+			    change_mom
+		formatString: 0
+		lineageTag: e0a8e097-4e01-486b-b2be-73a34174de24
+
+	measure 'Rating TB (ngày/tháng/năm) - hiện tại' = ```
+			
+			VAR TodayDate = MAX(DimDate[Date])
+			RETURN
+			CALCULATE(
+			    [Rating Score],
+			    FILTER(
+			        ALL ( 'DimDate' ),
+			        SWITCH(
+			            SELECTEDVALUE ( Prm_date[Parameter Order] ),
+			
+			            0, 'DimDate'[Date] = TodayDate,
+			
+			            1,
+			                'DimDate'[WeekYear] = YEAR ( TodayDate - WEEKDAY ( TodayDate, 2 ) + 4 )
+			                && 'DimDate'[WeekNum] = WEEKNUM ( TodayDate, 2 ),
+			
+			            2,
+			                'DimDate'[Year] = YEAR ( TodayDate )
+			                && 'DimDate'[Month] = MONTH ( TodayDate )
+			        )
+			    )
+			)
+			
+			```
+		lineageTag: 95aa11b7-e655-4665-9ecf-d475d827ecc4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SL review (ngày/tháng/năm) - hiện tại' =
+			
+			VAR TodayDate = MAX(DimDate[Date])
+			RETURN
+			CALCULATE(
+			    [SL review],
+			    FILTER(
+			        ALL ( 'DimDate' ),
+			        SWITCH(
+			            SELECTEDVALUE ( Prm_date[Parameter Order] ),
+			
+			            -- Day
+			            0, 'DimDate'[Date] = TodayDate,
+			
+			            -- Week (ISO Mon–Sun)
+			            1,
+			                'DimDate'[WeekYear] = YEAR ( TodayDate - WEEKDAY ( TodayDate, 2 ) + 4 )
+			                && 'DimDate'[WeekNum] = WEEKNUM ( TodayDate, 2 ),
+			
+			            -- Month
+			            2,
+			                'DimDate'[Year] = YEAR ( TodayDate )
+			                && 'DimDate'[Month] = MONTH ( TodayDate )
+			        )
+			    )
+			)
+		formatString: 0
+		lineageTag: 4abacbd1-29a0-4e2f-90b9-e4725909bac0
+
+	measure 'Rating Score' = ```
+			
+			VAR LastVisibleDate = MAX(DimDate[Date] )
+			//Tổng số sao hiện tại của các cửa hàng
+			VAR SumRatingNow =  
+			CALCULATE(
+			    SUMX(
+			        VALUES('gg_map'[Cửa hàng]),
+			        CALCULATE(MAX('gg_map'[AVG Rating Total]) * MAX('gg_map'[Review Total]))
+			    ),
+			    REMOVEFILTERS(DimDate)
+			)
+			
+			//Tổng reviews hiện tại của các cửa hàng
+			VAR ReviewsNow = 
+			CALCULATE(
+			    SUMX(
+			        VALUES('gg_map'[Cửa hàng]),
+			        CALCULATE(MAX('gg_map'[Review Total]))
+			    ),
+			    REMOVEFILTERS(DimDate)
+			)
+			
+			VAR IncrementalStars =
+			    CALCULATE(
+			        SUM( gg_map[Sao đánh giá] ),
+			        FILTER(
+			            ALL( DimDate ),
+			            DimDate[Date] > LastVisibleDate
+			        )
+			    )
+			
+			VAR IncrementalReviews =
+			    CALCULATE(
+			        COUNT( gg_map[id] ),
+			        FILTER(
+			            ALL( DimDate ),
+			            DimDate[Date] > LastVisibleDate
+			        )
+			    )
+			
+			VAR RawRating =
+			    DIVIDE(
+			        SumRatingNow - IncrementalStars,
+			        ReviewsNow - IncrementalReviews
+			    )
+			
+			RETURN  
+			    MIN( 5, RawRating )
+			```
+		lineageTag: 9dbbdbc3-181f-4cb9-96e7-17989ad217fb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Select Review Total' =
+			
+			VAR LastVisibleDate = MAX(DimDate[Date] )
+			
+			-- Snapshot hiện tại (không bị filter)
+			
+			VAR RatingNow =  CALCULATE(MAX(gg_map[AVG Rating Total]),REMOVEFILTERS(DimDate))
+			
+			VAR ReviewsNow = CALCULATE(MAX(gg_map[Review Total]),REMOVEFILTERS(DimDate))
+			
+			-- Phần phát sinh sau thời điểm đang xét
+			VAR IncrementalStars =
+			    CALCULATE(
+			        SUM( gg_map[Sao đánh giá] ),
+			        FILTER(
+			            ALL( DimDate ),
+			            DimDate[Date] > LastVisibleDate
+			        )
+			    )
+			
+			VAR IncrementalReviews =
+			    CALCULATE(
+			        COUNT( gg_map[id] ),
+			        FILTER(
+			            ALL( DimDate ),
+			            DimDate[Date] > LastVisibleDate
+			        )
+			    )
+			
+			RETURN IncrementalStars
+		formatString: 0
+		lineageTag: 648072ac-55f3-47f5-8bd6-10b50ff498bc
+
+	measure 'Tỷ lệ Review 5* / Tổng Hóa đơn' = DIVIDE(CALCULATE([SL review],gg_map[Sao đánh giá] = 5),[SL bill])
+		formatString: 0%;-0%;0%
+		lineageTag: 8ba7c250-cdfd-41e5-ae07-1993da883fce
+
+	column 'Thương hiệu'
+		dataType: string
+		lineageTag: 7580c257-830c-4f69-aed4-e9e3f20805b3
+		summarizeBy: none
+		sourceColumn: Thương hiệu
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ngày đánh giá'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d0038869-827c-455e-a557-e2b4cf3ace85
+		summarizeBy: none
+		sourceColumn: Ngày đánh giá
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Địa chỉ cụ thể'
+		dataType: string
+		lineageTag: c3e09f42-4437-4db6-a622-0be69ad697a9
+		summarizeBy: none
+		sourceColumn: Địa chỉ cụ thể
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Địa chỉ'
+		dataType: string
+		lineageTag: fd1ac9c4-5264-43f4-b24e-b46c5ccfaa6a
+		summarizeBy: none
+		sourceColumn: Địa chỉ
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tình trạng cửa hàng'
+		dataType: string
+		lineageTag: ab2b4e48-b0b7-4cf4-8c6d-833c50708f47
+		summarizeBy: none
+		sourceColumn: Tình trạng cửa hàng
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'AVG Rating Total'
+		dataType: double
+		lineageTag: 3ba1d58f-b443-403a-b2b9-1bef82bd1e1f
+		summarizeBy: sum
+		sourceColumn: AVG Rating Total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Review Comment'
+		dataType: string
+		lineageTag: 5760dc0c-e3db-40b8-9395-7b890c8b49a9
+		summarizeBy: none
+		sourceColumn: Review Comment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reviewer
+		dataType: string
+		lineageTag: 40f174e6-04f7-4fc1-98d1-ab7676d26770
+		summarizeBy: none
+		sourceColumn: Reviewer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sao đánh giá'
+		dataType: int64
+		formatString: 0
+		lineageTag: a02e0086-79e2-4da6-94e6-2a739563eb54
+		summarizeBy: sum
+		sourceColumn: Sao đánh giá
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Review Total'
+		dataType: int64
+		formatString: 0
+		lineageTag: d4a36ae5-a323-4e6a-aa15-3ecf7f2d98c2
+		summarizeBy: sum
+		sourceColumn: Review Total
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week label' = ```
+			YEAR ( 'gg_map'[Ngày đánh giá] ) 
+			 & IF(LEN(WEEKNUM(gg_map[Ngày đánh giá]))=1, CONCATENATE("W0",WEEKNUM(gg_map[Ngày đánh giá])), CONCATENATE("W", WEEKNUM(gg_map[Ngày đánh giá])))
+			```
+		lineageTag: 709b6321-6389-4fc7-afb9-f433cd0770e0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month label' =
+			
+			FORMAT ( 'gg_map'[Ngày đánh giá], "YYYY" )
+			& "M"
+			& FORMAT ( 'gg_map'[Ngày đánh giá], "MM" )
+		lineageTag: 04d88ecf-e65b-4630-ae1c-95124a6bcc06
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: da8d27a7-6c59-4516-b0d4-6946be881bfd
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Khu Vực' =
+			
+			SWITCH (
+			    TRUE (),
+			    'gg_map'[Cửa hàng]
+			        IN {
+			            "DDV-1442 Trần Hưng Đạo, Phường Mỹ Xuyên",
+			            "DDV-1072 Đường Hậu Giang, Phường 12, Quận 6",
+			            "DDV-116 Thái Hà, Quận Đống Đa",
+			            "DDV-132 Nguyễn Hữu Thọ",
+			            "DDV-160 Đường 30/4, Khu phố 1, P. Dương Đông",
+			            "DDV-20 Tỉnh Lộ 825, Thị Trấn Đức Hòa",
+			            "DDV-217 Bà Hom, Phường 13",
+			            "DDV-237 Khánh Hội, Phường 5, Quận 4",
+			            "DDV-24B Nguyễn Trãi, Phường Cái Khế, Quận Ninh Kiều",
+			            "DDV-316 Tùng Thiện Vương, Phường 13",
+			            "DDV-324 Huỳnh Tấn Phát, Phường Tân Thuận Tây, Quận 7",
+			            "DDV-349 Ấp Bắc",
+			            "DDV-3A Lê Thái Tổ, Quận Hoàn Kiếm",
+			            "DDV-45 Nguyễn Trung Trực",
+			            "DDV-550 Đại lộ Đồng Khởi",
+			            "DDV-619 Nguyễn Thị Thập, Phường Tân Hưng",
+			            "DDV-77 Trần Quang Khải, Phường Tân Định",
+			            "DDV-19 Đồng Khởi, Phường Sài Gòn"
+			        },
+			        "Khu vực AM Tiến Dũng",
+			    'gg_map'[Cửa hàng]
+			        IN {
+			
+			            "DDV-198A Tân Hương, P. Tân Quý",
+			            "DDV-385 Quang Trung, Phường 10",
+			            "DDV-438 Lê Trọng Tấn, P. Tây Thạnh, Q. Tân Phú",
+			            "DDV-450 Nguyễn Oanh, Phường 6, Quận Gò Vấp",
+			            "DDV-49 Lê Văn Việt, Phường Hiệp Phú",
+			            "DDV-515 Nguyễn Duy Trinh, Phường Bình Trưng Đông",
+			            "DDV-574 Cách Mạng Tháng 8, Phường 3",
+			            "DDV-60 Quang Trung, Phường 10, Gò Vấp",
+			            "DDV-621 Âu Cơ, Phường Hòa Thạnh, Quận Tân Phú",
+			            "DDV-63 Nguyễn Thị Tú , Khu Phố 3, Phường Bình Hưng Hoà ,Quận Bình Tân",
+			            "DDV-869 Tỉnh lộ 43",
+			            "DDV-87C Nguyễn Ảnh Thủ, Khu Phố 3, Trung Mỹ Tây",
+			            "DDV-967 Kha Vạn Cân, Phường Linh Tây",
+			            "DDV-97 Võ Văn Ngân, Phường Linh Chiểu"
+			        },
+			        "Khu vực AM Trúc Linh",
+			    'gg_map'[Cửa hàng]
+			        IN {
+			            "Bear-318 Đường 3 Tháng 2, Phường Hòa Hưng",
+			            "DDV-201 Thống Nhất, Phường 8",
+			            "DDV-829 Xa lộ Hà Nội, TP. Biên Hòa, Đồng Nai",
+			            "DDV-03 Phan Đăng Lưu, Phường Bình Thạnh",
+			            "DDV-16A Nguyễn An Ninh",
+			            "DDV-198 Hoàng Văn Thụ, Phường 4",
+			            "DDV-300 Lê Hồng Phong, Phường 01, Quận 10",
+			            "DDV-307 Đường Ba Tháng 2, Phường 10, Quận 10",
+			            "DDV-389 Phạm Văn Thuận",
+			            "DDV-39/1 - 40/1A đường 22 tháng 12, phường An Phú",
+			            "DDV-417 Đại Lộ Bình Dương",
+			            "DDV-573 Xô Viết Nghệ Tĩnh, Phường 26, Quận Bình Thạnh",
+			            "DDV-60 Hàm Nghi, Thạc Gián",
+			            "DDV-609 Lê Hồng Phong, Phường 10",
+			            "DDV-161 Trần Hưng Đạo, Phường Phú Thuỷ",
+			            "DDV-Đường Đường 3/2"
+			            // "DDV-745A" giống cái 3/2
+			        },
+			        "Khu vực AM Chí Tuấn",
+			    BLANK()
+			)
+		lineageTag: c36afc8a-7da1-47e9-a29f-15166fcc9075
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column shortName =
+			
+			-- Sử dụng biến để code dễ đọc hơn
+			VAR FullName = TRIM ( [Cửa hàng] ) -- Luôn làm sạch khoảng trắng thừa trước
+			VAR FullNameAsPath = SUBSTITUTE ( FullName, " ", "|" ) -- Chuyển chuỗi thành dạng path (VD: "DDV|79|Đồng|Khởi")
+			
+			-- Tách các thành phần của tên ra một cách an toàn
+			VAR Brand = PATHITEM ( FullNameAsPath, 1, TEXT )
+			VAR Number = PATHITEM ( FullNameAsPath, 2, TEXT )
+			VAR Word3 = PATHITEM ( FullNameAsPath, 3, TEXT )
+			VAR Word4 = PATHITEM ( FullNameAsPath, 4, TEXT )
+			VAR Word5 = PATHITEM ( FullNameAsPath, 5, TEXT ) -- Thêm các Word khác nếu cần
+			
+			-- Lấy chữ cái đầu của các từ một cách an toàn (tránh lỗi nếu từ đó không tồn tại)
+			VAR Initial3 = IF ( Word3 <> BLANK (), LEFT ( Word3, 1 ), "" )
+			VAR Initial4 = IF ( Word4 <> BLANK (), LEFT ( Word4, 1 ), "" )
+			VAR Initial5 = IF ( Word5 <> BLANK (), LEFT ( Word5, 1 ), "" ) -- Thêm các Initial khác nếu cần
+			
+			-- Tạo ra shortName theo logic
+			VAR GeneratedShortName = Brand & "_" & Number & Initial3 & Initial4 & Initial5
+			
+			RETURN
+			    -- Chỉ áp dụng logic nếu thương hiệu là "DDV"
+			    IF (
+			        Brand = "DDV",
+			        GeneratedShortName,
+			        FullName -- Giữ nguyên tên gốc cho các thương hiệu khác (VD: Bear, Vertu...)
+			    )
+		lineageTag: 3aab587b-c7fb-48ef-a795-6c0a26d1e256
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cửa hàng'
+		dataType: string
+		lineageTag: ce113127-f081-4fa2-a053-d8af59973df3
+		summarizeBy: none
+		sourceColumn: Cửa hàng
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gg_map = m
+		mode: import
+		source =
+				let
+				  Source = PowerBI.Dataflows([]),
+				  #"Navigation 1" = Source{[workspaceId = "d2508309-c02d-4ee4-9cef-55b2747294c8"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[dataflowId = "57b9bd09-dcc2-4501-abaf-4fcd19f7ce61"]}[Data],
+				  #"Navigation 3" = #"Navigation 2"{[entity = "gg_map"]}[Data],
+				  #"Renamed columns" = Table.RenameColumns(#"Navigation 3", {{"data.account_name", "Thương hiệu"}, {"data.date", "Ngày đánh giá"}, {"data.location_address_lines", "Địa chỉ cụ thể"}, {"data.location_address_locality", "Địa chỉ"}, {"data.location_open_info_status", "Tình trạng cửa hàng"}, {"data.review_average_rating_total", "Rating Total"}, {"data.review_comment", "Review Comment"}, {"data.review_reviewer", "Reviewer"}, {"data.review_star_rating", "Sao đánh giá"}, {"data.review_total_count", "Review Total"}}),
+				  #"Replaced value" = Table.ReplaceValue(#"Renamed columns", "Cửa hàng Di Động Việt", "Di Động Việt", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Added index" = Table.AddIndexColumn(#"Replaced value", "Index", 1, 1, Int64.Type),
+				  #"Renamed columns 1" = Table.RenameColumns(#"Added index", {{"Index", "id"}}),
+				  #"Renamed Columns 2" = Table.RenameColumns(#"Renamed columns 1", {{"Rating Total", "AVG Rating Total"}}),
+				  #"Replaced value 1" = Table.ReplaceValue(#"Renamed Columns 2", "ONE", "1", Replacer.ReplaceText, {"Sao đánh giá"}),
+				  #"Replaced value 2" = Table.ReplaceValue(#"Replaced value 1", "TWO", "2", Replacer.ReplaceText, {"Sao đánh giá"}),
+				  #"Replaced value 3" = Table.ReplaceValue(#"Replaced value 2", "THREE", "3", Replacer.ReplaceText, {"Sao đánh giá"}),
+				  #"Replaced value 4" = Table.ReplaceValue(#"Replaced value 3", "FOUR", "4", Replacer.ReplaceText, {"Sao đánh giá"}),
+				  #"Replaced value 5" = Table.ReplaceValue(#"Replaced value 4", "FIVE", "5", Replacer.ReplaceText, {"Sao đánh giá"}),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Replaced value 5", {{"Sao đánh giá", Int64.Type}, {"Ngày đánh giá", type date}, {"Review Total", Int64.Type}, {"AVG Rating Total", type number}}),
+				  #"Replaced value 6" = Table.ReplaceValue(#"Changed column type", "Di Động Việt", "DDV", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Replaced value 7" = Table.ReplaceValue(#"Replaced value 6", "Vertu Chính Hãng Việt Nam", "Vertu", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Replaced value 8" = Table.ReplaceValue(#"Replaced value 7", "Bear Plus - Cửa hàng Gia dụng Bear Chính hãng", "Bear", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Replaced value 9" = Table.ReplaceValue(#"Replaced value 8", "Viện Di Động", "VDD", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Replaced value 10" = Table.ReplaceValue(#"Replaced value 9", "Xe điện Yadea Plus - Phạm Hùng", "XMD", Replacer.ReplaceText, {"Thương hiệu"}),
+				  #"Added custom" = Table.AddColumn(#"Replaced value 10", "Cửa hàng", each [Thương hiệu] & "-" & [Địa chỉ cụ thể]),
+				  #"Filtered rows" = Table.SelectRows(#"Added custom", each ([Cửa hàng] <> "DDV-Dĩ An" and [Cửa hàng] <> "DDV-Phường 6" and [Cửa hàng] <> "DDV-Tam Binh" and [Cửa hàng] <> "DDV-Đường Đường 3/2"))
+				in
+				  #"Filtered rows"
+
+	annotation PBI_ResultType = Table
+
