@@ -62,7 +62,7 @@ table gg_map
 			VAR change_mom = IF(ISBLANK(SL_previous), 0, (SL_current - SL_previous) / SL_previous)
 			
 			RETURN
-			    change_mom
+				SL_previous
 		formatString: 0
 		lineageTag: e0a8e097-4e01-486b-b2be-73a34174de24
 
