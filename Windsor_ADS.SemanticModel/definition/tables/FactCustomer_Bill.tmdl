@@ -1,0 +1,125 @@
+table FactCustomer_Bill
+	lineageTag: 2387b72f-7241-4cfd-86ab-808dac38084f
+
+	measure 'SL bill' = CALCULATE(DISTINCTCOUNT(FactCustomer_Bill[billNumber]))
+		formatString: 0
+		lineageTag: f624f73e-3fe7-4bc3-9e43-336cbcde7845
+
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a2aa51d-3d63-4ccc-b66a-7f21707f1939
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column storeId
+		dataType: int64
+		formatString: 0
+		lineageTag: cb8ef034-3f5c-4f03-8d75-81066eb88bb2
+		summarizeBy: none
+		sourceColumn: storeId
+
+		annotation SummarizationSetBy = Automatic
+
+	column saleId
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c95e637-31fa-4bbd-b5fa-b6e24d314433
+		summarizeBy: count
+		sourceColumn: saleId
+
+		annotation SummarizationSetBy = Automatic
+
+	column billNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: e8b84c0e-c368-4d7f-aa19-03f688e269a2
+		summarizeBy: sum
+		sourceColumn: billNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column fullName
+		dataType: string
+		lineageTag: d9d21d67-673b-4753-9949-e3074f909658
+		summarizeBy: none
+		sourceColumn: fullName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PhoneNo
+		dataType: string
+		lineageTag: bcc81eb5-b6c1-46c4-a3f2-9fa4460a7a2c
+		summarizeBy: none
+		sourceColumn: PhoneNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: 732e1fb0-de7a-4974-8da7-c84063476f82
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column DanhXung
+		dataType: string
+		lineageTag: eadaaef3-1f5c-4711-97c6-218b09817165
+		summarizeBy: none
+		sourceColumn: DanhXung
+
+		annotation SummarizationSetBy = Automatic
+
+	column Address
+		dataType: string
+		lineageTag: fd3bb809-21f6-426f-a744-fea1bb0cd746
+		summarizeBy: none
+		sourceColumn: Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cities
+		dataType: string
+		lineageTag: d20bd752-b86f-43ba-8915-b92e1e465a60
+		summarizeBy: none
+		sourceColumn: Cities
+
+		annotation SummarizationSetBy = Automatic
+
+	column Wards
+		dataType: string
+		lineageTag: e987b580-a0fb-4620-886b-9f18b159ad92
+		summarizeBy: none
+		sourceColumn: Wards
+
+		annotation SummarizationSetBy = Automatic
+
+	column dateOfBirth
+		dataType: string
+		lineageTag: 1e13abb0-7e52-4841-aa1e-1d9d5a849ddb
+		summarizeBy: none
+		sourceColumn: dateOfBirth
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsFullInfo
+		dataType: int64
+		formatString: 0
+		lineageTag: 752f0ed8-e708-49b6-bedc-dc35e634c513
+		summarizeBy: sum
+		sourceColumn: IsFullInfo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactCustomer_Bill = m
+		mode: import
+		source =
+				let
+				  Source = Sql.Database("103.97.125.68:1143", "edw"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "FactCustomer_Bill"]}[Data]
+				in
+				  #"Navigation 1"
+

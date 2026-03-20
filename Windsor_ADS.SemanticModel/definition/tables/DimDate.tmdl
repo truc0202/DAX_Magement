@@ -1,0 +1,100 @@
+table DimDate
+	lineageTag: af5768ab-1b91-4ecc-a11b-8174831e3ef9
+
+	column Date
+		formatString: General Date
+		lineageTag: 0c1be6f6-1d3c-4b6b-aa29-50bb8ba1966b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: d4426d4c-5d56-4927-bfff-19b662c31697
+			defaultHierarchy: LocalDateTable_3f15f637-b00f-499b-8bb6-bf7a879f7da9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 8679a57d-f784-4359-aeb7-e5170a53ac53
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		formatString: 0
+		lineageTag: 40d1bed8-2e39-4273-bc8b-c3fea3836e09
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month label'
+		lineageTag: 141ceeb3-0f86-41c3-acf7-6056c53151f1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month label]
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNum
+		formatString: 0
+		lineageTag: 4048e302-58b1-4b3c-9d84-7c802c13e7ba
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [WeekNum]
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekYear
+		formatString: 0
+		lineageTag: 99e4261a-81c4-48cd-ac56-6fd9fc616498
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [WeekYear]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week label'
+		lineageTag: 3ad5c68b-0da5-4b5c-ba1a-8062498d38ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week label]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		lineageTag: a12ec857-6787-44a3-ac3f-4680b00f0aba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DateKey]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = calculated
+		mode: import
+		source = ```
+				
+				ADDCOLUMNS (
+				    CALENDAR(
+				        MIN('gg_map'[Ngày đánh giá]),
+				        MAX('gg_map'[Ngày đánh giá])
+				    ),
+				    "Year", YEAR ( [Date] ),
+				    "Month", MONTH ( [Date] ),
+				    "Month label", FORMAT ( [Date], "YYYY" ) & "M" & FORMAT ( [Date], "MM" ),
+				    "WeekNum", WEEKNUM ( [Date], 2 ),
+				    "WeekYear", YEAR ( [Date] - WEEKDAY ( [Date], 2 ) + 4 ),
+				    "Week label",
+				        YEAR ([Date]) 
+				        & IF(LEN(WEEKNUM([Date],2))=1, CONCATENATE("W0",WEEKNUM([Date],2)), CONCATENATE("W", WEEKNUM([DATE],2))),
+				    "DateKey", FORMAT([Date], "YYYYMMDD")
+				)
+				```
+
+	annotation PBI_Id = 8e28b0473ee84e3dbb8082fa12801590
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Google Maps Rating"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "191ce2ce-6db1-8b72-436f-d133f0ee9710"
+  }
+}

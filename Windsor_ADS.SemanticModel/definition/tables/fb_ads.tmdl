@@ -1,0 +1,423 @@
+table fb_ads
+	lineageTag: 720f392d-233f-425c-88da-c74461f71868
+
+	measure cost_per_leads = DIVIDE(sum(fb_ads[data.totalcost]), SUM(fb_ads[data.actions_lead]),0)
+		lineageTag: f44e4bca-9028-45dc-b346-d738335e31a2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure cost_per_clicks = DIVIDE(sum(fb_ads[data.totalcost]), SUM(fb_ads[data.clicks]),0)
+		lineageTag: c20187bc-ee25-4860-b77d-921f90407967
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CPA (cost/mess)' = DIVIDE(SUM(fb_ads[data.totalcost]), sum(fb_ads[data.actions_onsite_conversion_messaging_conversation_started_7d]),0 )
+		lineageTag: 1eaabfca-033d-44bb-b7cf-1d31b646575c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CPM(Cost per 1000 impressions)' = DIVIDE(sum(fb_ads[data.totalcost]), sum(fb_ads[data.impressions]),0)*1000
+		lineageTag: 5549847a-5184-41e5-a300-04312279ca86
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.account_name'
+		dataType: string
+		lineageTag: 9bb30bac-1828-418d-9705-21805c0f458b
+		summarizeBy: none
+		sourceColumn: data.account_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_comment'
+		dataType: int64
+		formatString: 0
+		lineageTag: 860b98da-beda-460a-b036-15d280611f0b
+		summarizeBy: sum
+		sourceColumn: data.actions_comment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_landing_page_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6698b8ea-d6a5-4619-8894-629742fda44c
+		summarizeBy: sum
+		sourceColumn: data.actions_landing_page_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_lead'
+		dataType: int64
+		formatString: 0
+		lineageTag: 87048115-1419-4e1b-bd01-eb556ba4277d
+		summarizeBy: sum
+		sourceColumn: data.actions_lead
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_like'
+		dataType: int64
+		formatString: 0
+		lineageTag: 443ec9cd-772f-4790-8b09-583b63ffc649
+		summarizeBy: sum
+		sourceColumn: data.actions_like
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_onsite_conversion_lead_grouped'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a2bd01c-1c81-49dc-88fd-dfc4bd88edab
+		summarizeBy: sum
+		sourceColumn: data.actions_onsite_conversion_lead_grouped
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_onsite_conversion_messaging_conversation_started_7d'
+		dataType: int64
+		formatString: 0
+		lineageTag: 973189c4-1b83-4406-a094-5f15988022de
+		summarizeBy: sum
+		sourceColumn: data.actions_onsite_conversion_messaging_conversation_started_7d
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_onsite_conversion_post_save'
+		dataType: int64
+		formatString: 0
+		lineageTag: da859ea3-d478-4f94-8a87-f5eeb69b8134
+		summarizeBy: sum
+		sourceColumn: data.actions_onsite_conversion_post_save
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_page_engagement'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2badfdfb-2c7d-4063-b8f7-86f236f0afee
+		summarizeBy: sum
+		sourceColumn: data.actions_page_engagement
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_post_engagement'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6001f0dd-9ecb-49c5-adce-717f2cf65b54
+		summarizeBy: sum
+		sourceColumn: data.actions_post_engagement
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_post_reaction'
+		dataType: int64
+		formatString: 0
+		lineageTag: dc99254a-5309-49cb-8dbd-9773b42c72b0
+		summarizeBy: sum
+		sourceColumn: data.actions_post_reaction
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_rsvp'
+		dataType: string
+		lineageTag: 3df8e33c-be68-4222-9fb8-7f6266576da4
+		summarizeBy: none
+		sourceColumn: data.actions_rsvp
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: 812b9c5d-c2b6-4938-ab81-2a899f9775be
+		summarizeBy: sum
+		sourceColumn: data.actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.ad_id'
+		dataType: int64
+		formatString: 0
+		lineageTag: bad351e1-0f3b-40e3-9b54-b1388ff299b8
+		summarizeBy: sum
+		sourceColumn: data.ad_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.ad_name'
+		dataType: string
+		lineageTag: 370dde8b-fb14-4261-920b-ec398fedee5a
+		summarizeBy: none
+		sourceColumn: data.ad_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.adset_name'
+		dataType: string
+		lineageTag: fb5a92d3-b3b8-47f0-8087-c330632e5bcc
+		summarizeBy: none
+		sourceColumn: data.adset_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign'
+		dataType: string
+		lineageTag: fedf5914-57d0-4c92-a744-c7c9cafcba42
+		summarizeBy: none
+		sourceColumn: data.campaign
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_daily_budget'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7533258f-b0b8-4016-9364-689731dfb91a
+		summarizeBy: sum
+		sourceColumn: data.campaign_daily_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_objective'
+		dataType: string
+		lineageTag: 687fdfc2-4603-465e-9eb9-6200adb47976
+		summarizeBy: none
+		sourceColumn: data.campaign_objective
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_start_time'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 66218795-d11d-4b44-8235-0453d45aa5dd
+		summarizeBy: none
+		sourceColumn: data.campaign_start_time
+
+		variation Variation
+			isDefault
+			relationship: 955f1893-0bc3-412a-b0d3-c13df0e3f306
+			defaultHierarchy: LocalDateTable_e386ea24-218d-429f-aaf3-02dd42205301.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_status'
+		dataType: string
+		lineageTag: 4af0506c-1c42-4e27-8521-6e6e48fe6b25
+		summarizeBy: none
+		sourceColumn: data.campaign_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.campaign_stop_time'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d9bc8148-c40f-43f3-9bcf-a03634204b7c
+		summarizeBy: none
+		sourceColumn: data.campaign_stop_time
+
+		variation Variation
+			isDefault
+			relationship: 45c00d56-d465-4ebd-b90a-1bb68bb791ac
+			defaultHierarchy: LocalDateTable_958ccaca-ee5a-4115-9984-875e4a1e2002.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.clicks'
+		dataType: int64
+		formatString: 0
+		lineageTag: e9934743-736a-4667-ada3-eeb159d249b9
+		summarizeBy: sum
+		sourceColumn: data.clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.ctr'
+		dataType: double
+		lineageTag: 113cda0a-8b0f-4520-bcb3-72f9ee979383
+		summarizeBy: sum
+		sourceColumn: data.ctr
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.currency'
+		dataType: string
+		lineageTag: 69ba1338-f9d6-4b70-90bd-4cfb37b15d7d
+		summarizeBy: none
+		sourceColumn: data.currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: dad1fa49-1193-456e-8357-9088f17db941
+		summarizeBy: none
+		sourceColumn: data.date
+
+		variation Variation
+			isDefault
+			relationship: bd619a85-306e-4642-9156-6653c9e18f04
+			defaultHierarchy: LocalDateTable_b57f865f-7181-42d1-93a7-a444bd27badc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'data.desktop_feed_standard_preview_url'
+		dataType: string
+		lineageTag: a53c815c-c73d-4ace-935d-e855e220ea02
+		summarizeBy: none
+		sourceColumn: data.desktop_feed_standard_preview_url
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.frequency'
+		dataType: double
+		lineageTag: dfda6511-d00a-4697-b362-adbc34ea6d17
+		summarizeBy: sum
+		sourceColumn: data.frequency
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'data.impressions'
+		dataType: int64
+		formatString: 0
+		lineageTag: df01e20a-c815-4724-a176-cd501767b58d
+		summarizeBy: sum
+		sourceColumn: data.impressions
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.link_clicks'
+		dataType: int64
+		formatString: 0
+		lineageTag: d7b1f526-88e8-41ad-9bac-49ff96287465
+		summarizeBy: sum
+		sourceColumn: data.link_clicks
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.reach'
+		dataType: int64
+		formatString: 0
+		lineageTag: 42648eaf-5942-4080-a0f6-4686392717e8
+		summarizeBy: sum
+		sourceColumn: data.reach
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.status'
+		dataType: string
+		lineageTag: 4fc1cf26-0673-43be-b198-c1a5ac6ba0c7
+		summarizeBy: none
+		sourceColumn: data.status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.totalcost'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5faad68a-c62f-4417-b474-fe8037c2d54a
+		summarizeBy: sum
+		sourceColumn: data.totalcost
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_avg_time_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: 03bd6e63-90ad-4076-9927-8188216bf64e
+		summarizeBy: sum
+		sourceColumn: data.video_avg_time_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_continuous_2_sec_watched_actions_video_view'
+		dataType: string
+		lineageTag: 776fe90a-3351-4259-b946-29257687a78b
+		summarizeBy: none
+		sourceColumn: data.video_continuous_2_sec_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_p100_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: def498b0-d29f-4711-83c3-84785818bb6a
+		summarizeBy: sum
+		sourceColumn: data.video_p100_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_p25_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: bf50c6be-2e8b-4e01-b2da-36f31091a47b
+		summarizeBy: sum
+		sourceColumn: data.video_p25_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_p50_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: e3dc1c4b-bf62-435a-b5c8-e713c7747622
+		summarizeBy: sum
+		sourceColumn: data.video_p50_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_p75_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: ea7db769-d7e7-456f-900a-dd09ac20c1cc
+		summarizeBy: sum
+		sourceColumn: data.video_p75_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_p95_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: ee836da5-3dbd-47f5-9a07-20f1e702d6c6
+		summarizeBy: sum
+		sourceColumn: data.video_p95_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_play_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: a63c4b8d-2817-4314-8187-81b4ec7c6960
+		summarizeBy: sum
+		sourceColumn: data.video_play_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'data.video_thruplay_watched_actions_video_view'
+		dataType: int64
+		formatString: 0
+		lineageTag: 49cf3292-15b7-4de4-933b-9798df3c5f29
+		summarizeBy: sum
+		sourceColumn: data.video_thruplay_watched_actions_video_view
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fb_ads = m
+		mode: import
+		source =
+				let
+				  Source = PowerBI.Dataflows([]),
+				  #"Navigation 1" = Source{[workspaceId = "d2508309-c02d-4ee4-9cef-55b2747294c8"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[dataflowId = "57b9bd09-dcc2-4501-abaf-4fcd19f7ce61"]}[Data],
+				  #"Navigation 3" = #"Navigation 2"{[entity = "fb_ads"]}[Data],
+				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 3", {{"data.campaign_start_time", type datetime}, {"data.campaign_stop_time", type datetime}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+
